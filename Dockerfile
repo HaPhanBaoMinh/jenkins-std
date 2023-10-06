@@ -1,26 +1,11 @@
-FROM  centos:latest
-MAINTAINER vikashashoke@gmail.com
-RUN yum install -y httpd \
- zip\
- unzip
-ADD https://www.free-css.com/assets/files/free-css-templates/download/page254/photogenic.zip /var/www/html/
-WORKDIR /var/www/html/
-RUN unzip photogenic.zip
-RUN cp -rvf photogenic/* .
-RUN rm -rf photogenic photogenic.zip
-CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+# Sử dụng hình ảnh nginx mặc định từ Docker Hub
+FROM nginx
+
+# Sao chép các tệp tài liệu (trang web) vào thư mục root của Nginx
+COPY html /usr/share/nginx/html
+
+# Khai báo cổng mà Nginx lắng nghe (mặc định là 80)
 EXPOSE 80
- 
- 
-# FROM  centos:latest
-# MAINTAINER vikashashoke@gmail.com
-# RUN yum install -y httpd \
-#  zip\
-#  unzip
-# ADD https://www.free-css.com/assets/files/free-css-templates/download/page265/shine.zip /var/www/html/
-# WORKDIR /var/www/html/
-# RUN unzip shine.zip
-# RUN cp -rvf shine/* .
-# RUN rm -rf shine shine.zip
-# CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
-# EXPOSE 80   
+
+# Lệnh để chạy Nginx trong container khi container được khởi chạy
+CMD ["nginx", "-g", "daemon off;"]
